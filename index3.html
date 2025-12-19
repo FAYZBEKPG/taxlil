@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma'lumot Turi Tahlilchisi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .type-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .type-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .type-card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 3px solid #764ba2;
+            padding-bottom: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .result h3 {
+            color: #764ba2;
+            margin-bottom: 10px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .type-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .examples {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #1976d2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Ma'lumot Turi Tahlilchisi</h1>
+
+        <div class="type-cards">
+            <!-- STRING -->
+            <div class="type-card">
+                <h2>📝 STRING (Matn)</h2>
+                <div class="input-group">
+                    <label>Matn kiriting:</label>
+                    <input type="text" id="stringInput" placeholder="Salom Dunyo">
+                </div>
+                <button onclick="stringTahlil()">Tahlil Qilish</button>
+                <div id="stringResult" class="result"></div>
+                <div class="examples">
+                    <strong>Misollar:</strong> "Salom", 'Ali', `test`, "123"
+                </div>
+            </div>
+
+            <!-- NUMBER -->
+            <div class="type-card">
+                <h2>🔢 NUMBER (Raqam)</h2>
+                <div class="input-group">
+                    <label>Raqam kiriting:</label>
+                    <input type="text" id="numberInput" placeholder="42">
+                </div>
+                <button onclick="numberTahlil()">Tahlil Qilish</button>
+                <div id="numberResult" class="result"></div>
+                <div class="examples">
+                    <strong>Misollar:</strong> 42, 3.14, -10, 0, Infinity, NaN
+                </div>
+            </div>
+
+            <!-- BOOLEAN -->
+            <div class="type-card">
+                <h2>✅ BOOLEAN (Mantiqiy)</h2>
+                <div class="input-group">
+                    <label>Qiymat kiriting:</label>
+                    <input type="text" id="booleanInput" placeholder="true yoki false">
+                </div>
+                <button onclick="booleanTahlil()">Tahlil Qilish</button>
+                <div id="booleanResult" class="result"></div>
+                <div class="examples">
+                    <strong>Misollar:</strong> true, false, 10 > 5, "Ali" === "Ali"
+                </div>
+            </div>
+
+            <!-- TYPE CONVERTER -->
+            <div class="type-card">
+                <h2>🔄 Tur O'zgartirish</h2>
+                <div class="input-group">
+                    <label>Qiymat kiriting:</label>
+                    <input type="text" id="convertInput" placeholder="123">
+                </div>
+                <button onclick="turOzgartirish()">O'zgartirish</button>
+                <div id="convertResult" class="result"></div>
+                <div class="examples">
+                    <strong>Test:</strong> "123", true, null, undefined, ""
+                </div>
+            </div>
+
+            <!-- COMPARISON -->
+            <div class="type-card">
+                <h2>⚖️ Taqqoslash</h2>
+                <div class="input-group">
+                    <label>Birinchi qiymat:</label>
+                    <input type="text" id="compare1" placeholder="5">
+                </div>
+                <div class="input-group">
+                    <label>Ikkinchi qiymat:</label>
+                    <input type="text" id="compare2" placeholder="5">
+                </div>
+                <button onclick="taqqoslash()">Taqqoslash</button>
+                <div id="compareResult" class="result"></div>
+                <div class="examples">
+                    <strong>Test:</strong> 5 va "5", true va 1, null va undefined
+                </div>
+            </div>
+
+            <!-- TRUTHY/FALSY -->
+            <div class="type-card">
+                <h2>💡 Truthy/Falsy</h2>
+                <div class="input-group">
+                    <label>Qiymat kiriting:</label>
+                    <input type="text" id="truthyInput" placeholder="0">
+                </div>
+                <button onclick="truthyTekshir()">Tekshirish</button>
+                <div id="truthyResult" class="result"></div>
+                <div class="examples">
+                    <strong>Falsy:</strong> false, 0, "", null, undefined, NaN
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log("🚀 Ma'lumot Turi Tahlilchisi yuklandi!");
+
+        // STRING TAHLIL
+        function stringTahlil() {
+            const input = document.getElementById('stringInput').value;
+
+            const html = `
+                <h3>Natijalar:</h3>
+                <div class="result-item">
+                    <span>Qiymat:</span>
+                    <span>"${input}"</span>
+                </div>
+                <div class="result-item">
+                    <span>Tur:</span>
+                    <span class="type-badge">string</span>
+                </div>
+                <div class="result-item">
+                    <span>Uzunlik:</span>
+                    <span>${input.length} ta belgi</span>
+                </div>
+                <div class="result-item">
+                    <span>Bo'sh:</span>
+                    <span>${input === "" ? "✅ Ha" : "❌ Yo'q"}</span>
+                </div>
+                <div class="result-item">
+                    <span>Birinchi belgi:</span>
+                    <span>${input[0] || "Yo'q"}</span>
+                </div>
+                <div class="result-item">
+                    <span>Oxirgi belgi:</span>
+                    <span>${input[input.length - 1] || "Yo'q"}</span>
+                </div>
+                <div class="result-item">
+                    <span>Katta harf:</span>
+                    <span>${input.toUpperCase()}</span>
+                </div>
+                <div class="result-item">
+                    <span>Kichik harf:</span>
+                    <span>${input.toLowerCase()}</span>
+                </div>
+            `;
+
+            document.getElementById('stringResult').innerHTML = html;
+            document.getElementById('stringResult').classList.add('show');
+
+            console.log("STRING:", input, typeof input);
+        }
+
+        // NUMBER TAHLIL
+        function numberTahlil() {
+            const input = document.getElementById('numberInput').value;
+            const num = Number(input);
+
+            const html = `
+                <h3>Natijalar:</h3>
+                <div class="result-item">
+                    <span>Kiritilgan:</span>
+                    <span>"${input}"</span>
+                </div>
+                <div class="result-item">
+                    <span>Number:</span>
+                    <span>${num}</span>
+                </div>
+                <div class="result-item">
+                    <span>Tur:</span>
+                    <span class="type-badge">${typeof num}</span>
+                </div>
+                <div class="result-item">
+                    <span>Raqammi:</span>
+                    <span>${!isNaN(num) ? "✅ Ha" : "❌ Yo'q (NaN)"}</span>
+                </div>
+                <div class="result-item">
+                    <span>Chekli:</span>
+                    <span>${isFinite(num) ? "✅ Ha" : "❌ Yo'q (Infinity)"}</span>
+                </div>
+                <div class="result-item">
+                    <span>Musbat:</span>
+                    <span>${num > 0 ? "✅ Ha" : "❌ Yo'q"}</span>
+                </div>
+                <div class="result-item">
+                    <span>Juft:</span>
+                    <span>${num % 2 === 0 ? "✅ Ha" : "❌ Yo'q"}</span>
+                </div>
+                <div class="result-item">
+                    <span>x2:</span>
+                    <span>${num * 2}</span>
+                </div>
+            `;
+
+            document.getElementById('numberResult').innerHTML = html;
+            document.getElementById('numberResult').classList.add('show');
+
+            console.log("NUMBER:", num, typeof num);
+        }
+
+        // BOOLEAN TAHLIL
+        function booleanTahlil() {
+            const input = document.getElementById('booleanInput').value;
+            let bool;
+
+            if (input === "true") bool = true;
+            else if (input === "false") bool = false;
+            else bool = Boolean(input);
+
+            const html = `
+                <h3>Natijalar:</h3>
+                <div class="result-item">
+                    <span>Kiritilgan:</span>
+                    <span>"${input}"</span>
+                </div>
+                <div class="result-item">
+                    <span>Boolean:</span>
+                    <span>${bool}</span>
+                </div>
+                <div class="result-item">
+                    <span>Tur:</span>
+                    <span class="type-badge">${typeof bool}</span>
+                </div>
+                <div class="result-item">
+                    <span>Truthy:</span>
+                    <span>${bool ? "✅ Ha" : "❌ Yo'q (Falsy)"}</span>
+                </div>
+                <div class="result-item">
+                    <span>NOT (!):</span>
+                    <span>${!bool}</span>
+                </div>
+                <div class="result-item">
+                    <span>AND true:</span>
+                    <span>${bool && true}</span>
+                </div>
+                <div class="result-item">
+                    <span>OR false:</span>
+                    <span>${bool || false}</span>
+                </div>
+            `;
+
+            document.getElementById('booleanResult').innerHTML = html;
+            document.getElementById('booleanResult').classList.add('show');
+
+            console.log("BOOLEAN:", bool, typeof bool);
+        }
+
+        // TUR O'ZGARTIRISH
+        function turOzgartirish() {
+            const input = document.getElementById('convertInput').value;
+            let qiymat = input;
+
+            // Maxsus qiymatlar
+            if (input === "true") qiymat = true;
+            else if (input === "false") qiymat = false;
+            else if (input === "null") qiymat = null;
+            else if (input === "undefined") qiymat = undefined;
+            else if (input === "") qiymat = "";
+
+            const toNumber = Number(qiymat);
+            const toString = String(qiymat);
+            const toBoolean = Boolean(qiymat);
+
+            const html = `
+                <h3>O'girish Natijalari:</h3>
+                <div class="result-item">
+                    <span>Asl qiymat:</span>
+                    <span>${JSON.stringify(qiymat)}</span>
+                </div>
+                <div class="result-item">
+                    <span>Asl tur:</span>
+                    <span class="type-badge">${typeof qiymat}</span>
+                </div>
+                <div class="result-item">
+                    <span>→ Number:</span>
+                    <span>${toNumber} <span class="type-badge">number</span></span>
+                </div>
+                <div class="result-item">
+                    <span>→ String:</span>
+                    <span>"${toString}" <span class="type-badge">string</span></span>
+                </div>
+                <div class="result-item">
+                    <span>→ Boolean:</span>
+                    <span>${toBoolean} <span class="type-badge">boolean</span></span>
+                </div>
+            `;
+
+            document.getElementById('convertResult').innerHTML = html;
+            document.getElementById('convertResult').classList.add('show');
+
+            console.log("KONVERTATSIYA:", {asl: qiymat, number: toNumber, string: toString, boolean: toBoolean});
+        }
+
+        // TAQQOSLASH
+        function taqqoslash() {
+            let val1 = document.getElementById('compare1').value;
+            let val2 = document.getElementById('compare2').value;
+
+            // Maxsus qiymatlar
+            if (val1 === "true") val1 = true;
+            else if (val1 === "false") val1 = false;
+            else if (val1 === "null") val1 = null;
+            else if (val1 === "undefined") val1 = undefined;
+
+            if (val2 === "true") val2 = true;
+            else if (val2 === "false") val2 = false;
+            else if (val2 === "null") val2 = null;
+            else if (val2 === "undefined") val2 = undefined;
+
+            const html = `
+                <h3>Taqqoslash Natijalari:</h3>
+                <div class="result-item">
+                    <span>Birinchi:</span>
+                    <span>${JSON.stringify(val1)} <span class="type-badge">${typeof val1}</span></span>
+                </div>
+                <div class="result-item">
+                    <span>Ikkinchi:</span>
+                    <span>${JSON.stringify(val2)} <span class="type-badge">${typeof val2}</span></span>
+                </div>
+                <div class="result-item">
+                    <span>== (loose):</span>
+                    <span>${val1 == val2 ? "✅ true" : "❌ false"}</span>
+                </div>
+                <div class="result-item">
+                    <span>=== (strict):</span>
+                    <span>${val1 === val2 ? "✅ true" : "❌ false"}</span>
+                </div>
+                <div class="result-item">
+                    <span>!= (loose):</span>
+                    <span>${val1 != val2 ? "✅ true" : "❌ false"}</span>
+                </div>
+                <div class="result-item">
+                    <span>!== (strict):</span>
+                    <span>${val1 !== val2 ? "✅ true" : "❌ false"}</span>
+                </div>
+            `;
+
+            document.getElementById('compareResult').innerHTML = html;
+            document.getElementById('compareResult').classList.add('show');
+
+            console.log("TAQQOSLASH:", val1, "vs", val2);
+        }
+
+        // TRUTHY/FALSY TEKSHIRISH
+        function truthyTekshir() {
+            let input = document.getElementById('truthyInput').value;
+
+            // Maxsus qiymatlar
+            if (input === "true") input = true;
+            else if (input === "false") input = false;
+            else if (input === "null") input = null;
+            else if (input === "undefined") input = undefined;
+            else if (input === "NaN") input = NaN;
+            else if (input === "0") input = 0;
+            else if (input === "") input = "";
+
+            const isTruthy = Boolean(input);
+
+            // Falsy qiymatlar ro'yxati
+            const falsyValues = [false, 0, "", null, undefined, NaN];
+            const isFalsy = falsyValues.some(v =>
+                (Number.isNaN(v) && Number.isNaN(input)) || v === input
+            );
+
+            const html = `
+                <h3>Truthy/Falsy Tahlili:</h3>
+                <div class="result-item">
+                    <span>Qiymat:</span>
+                    <span>${JSON.stringify(input)}</span>
+                </div>
+                <div class="result-item">
+                    <span>Tur:</span>
+                    <span class="type-badge">${typeof input}</span>
+                </div>
+                <div class="result-item">
+                    <span>Boolean():</span>
+                    <span>${isTruthy ? "✅ true" : "❌ false"}</span>
+                </div>
+                <div class="result-item">
+                    <span>Kategoriya:</span>
+                    <span class="type-badge">${isTruthy ? "TRUTHY" : "FALSY"}</span>
+                </div>
+                <div class="result-item">
+                    <span>if() da:</span>
+                    <span>${isTruthy ? "✅ Ishlaydi" : "❌ Ishlamaydi"}</span>
+                </div>
+                <div class="result-item">
+                    <span>!!(qiymat):</span>
+                    <span>${!!input}</span>
+                </div>
+            `;
+
+            document.getElementById('truthyResult').innerHTML = html;
+            document.getElementById('truthyResult').classList.add('show');
+
+            console.log("TRUTHY/FALSY:", input, "→", isTruthy);
+        }
+
+        console.log("✅ Barcha funksiyalar tayyor!");
+    </script>
+</body>
+</html>
